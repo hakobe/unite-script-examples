@@ -4,28 +4,7 @@ use Mac::AppleScript qw(RunAppleScript);
 use Perl6::Say;
 use FindBin;
 
-BEGIN {
-    $ENV{ITUNES_TELL} = 1;
-};
-
 my $me = "$0";
-my $mode = shift || '';
-
-if ($mode eq 'play_n') {
-    &play_n(@ARGV);
-}
-elsif ($mode eq 'play') {
-}
-elsif ($mode eq 'stop') {
-}
-elsif ($mode eq 'next') {
-}
-elsif ($mode eq 'prev') {
-}
-else {
-    &panel(@ARGV);
-    &list(@ARGV);
-} 
 
 sub play {
     my $script = <<"SCRIPT";
@@ -45,7 +24,7 @@ SCRIPT
     RunAppleScript($script);
 }
 
-sub next {
+sub next_track {
     my $script = <<"SCRIPT";
         tell application "iTunes"
             next track
@@ -54,7 +33,7 @@ SCRIPT
     RunAppleScript($script);
 }
 
-sub prev {
+sub prev_track {
     my $script = <<"SCRIPT";
         tell application "iTunes"
             previous track
@@ -72,15 +51,6 @@ sub play_n {
         end tell
 SCRIPT
     RunAppleScript($script);
-}
-
-sub panel {
-    print <<"PANEL"
-|>,call system('perl $me play')
-[],call system('perl $me stop')
->>,call system('perl $me next')
-<<,call system('perl $me prev')
-PANEL
 }
 
 sub list {
@@ -114,10 +84,30 @@ SCRIPT
     } split /\n/, $result ];
 
     for my $song (@$songs) {
-        say sprintf(qq<%s(%s) - %s,call system('perl %s play_n %s')>, 
+        say sprintf(qq<%s(%s) - %s\tcall system('perl %s play_n %s')>, 
             $song->{title}, $song->{time}, $song->{artist},
             $me, $song->{position} 
         );
     }
 }
 
+my $mode = shift || '';
+
+if ($mode eq 'play_n') {
+    play_n(@ARGV);
+}
+elsif ($mode eq 'play') {
+    play();
+}
+elsif ($mode eq 'stop') {
+    stop();
+}
+elsif ($mode eq 'next') {
+    next_track();
+}
+elsif ($mode eq 'prev') {
+    prev_track();
+}
+else {
+    list(@ARGV);
+} 

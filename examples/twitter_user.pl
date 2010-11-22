@@ -18,5 +18,5 @@ my $res = URI::Fetch->fetch(
 my $feed = XML::Feed->parse(\($res->content));
 
 for my $entry ($feed->entries) {
-    say sprintf("%s,call system('open %s')", $entry->title, $entry->link);
+    say sprintf("%s\tcall system('open %s')", $entry->title, $entry->link);
 }

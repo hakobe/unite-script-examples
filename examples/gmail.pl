@@ -24,6 +24,6 @@ my $feed = XML::Feed->parse(\($res->content));
 for my $entry ($feed->entries) {
     my $summary = $entry->summary->body;
     $summary =~ s/^.*。\s+//g;
-    say sprintf(q<%s,call system('open "%s"')>, $summary, $entry->link);
+    say sprintf(qq<%s\tcall system('open "%s"')>, $summary, $entry->link);
 }
 

@@ -1,4 +1,5 @@
-" script.vim
+" unite scripts with unite.vim
+" see http://d.hatena.ne.jp/hakobe932
 
 let s:source = {
 \   'name': 'script',
@@ -10,32 +11,25 @@ function! s:source.on_init(args, context)
         \ }
 endfunction
 
-function! s:get_word(line)
+function! s:create_candidate(val)
+    let matches = matchlist(a:val, '^\(.*\)\t\(.*\)$')
 
-    let word = (split(a:line, ","))[0]
-    return word
-endfunction
-
-function! s:get_command(line)
-    let command = (split(a:line, ","))[1]
-    return command
+    if len(matches) == 0
+        return {"word": "none"}
+    endif
+    return {
+    \   "word": matches[1],
+    \   "source": "script",
+    \   "kind": "command",
+    \   "action__command": matches[2] 
+    \ }
 endfunction
 
 function! s:source.gather_candidates(args, context)
-    if len(a:args) <2 
-        call unite#print_error("please specify runner and script")
-        return []
-    endif
-
     let runner = a:args[0]
     let script = a:args[1]
     let lines = split(system(printf("%s %s %s", runner, script, s:buffer.path)), "\n")
-    return map(lines, '{
-    \   "word": s:get_word(v:val),
-    \   "source": "script",
-    \   "kind": "command",
-    \   "action__command": s:get_command(v:val),
-    \ }')
+    return filter(map(lines, 's:create_candidate(v:val)'), 'len(v:val) > 0')
 endfunction
 
 function! unite#sources#script#define()
