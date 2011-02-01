@@ -3,9 +3,10 @@
 
 let s:source = {
 \   'name': 'script',
+\   'hooks': {}
 \ }
 
-function! s:source.on_init(args, context)
+function! s:source.hooks.on_init(args, context)
     let s:buffer = {
         \ 'path'    : expand('%'),
         \ }
