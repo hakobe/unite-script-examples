@@ -68,7 +68,7 @@ sub list {
         end tell
 SCRIPT
 
-    my $result = RunAppleScript($script);
+    my $result = RunAppleScript($script) || "";
     $result =~ s/^"//g;
     $result =~ s/"$//g;
 
