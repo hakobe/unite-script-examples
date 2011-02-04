@@ -89,6 +89,13 @@ SCRIPT
             $me, $song->{position} 
         );
     }
+    print <<"PANEL"
+|>\tcall system('perl $me play')
+[]\tcall system('perl $me stop')
+>>\tcall system('perl $me next')
+<<\tcall system('perl $me prev')
+PANEL
+
 }
 
 my $mode = shift || '';
