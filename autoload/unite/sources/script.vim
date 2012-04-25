@@ -5,11 +5,9 @@ let s:source = {
 \   'name': 'script',
 \ }
 
-function! s:source.on_init(args, context)
-    let s:buffer = {
-        \ 'path'    : expand('%'),
-        \ }
-endfunction
+let s:buffer = {
+\   'path': expand('%'),
+\ }
 
 function! s:create_candidate(val)
     let matches = matchlist(a:val, '^\(.*\)\t\(.*\)$')
