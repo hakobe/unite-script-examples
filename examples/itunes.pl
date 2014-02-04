@@ -90,10 +90,10 @@ SCRIPT
         );
     }
     print <<"PANEL"
-|>\tcall system('perl $me play')
-[]\tcall system('perl $me stop')
->>\tcall system('perl $me next')
-<<\tcall system('perl $me prev')
+[play]\tcall system('perl $me play')
+[stop]\tcall system('perl $me stop')
+[next]\tcall system('perl $me next')
+[prev]\tcall system('perl $me prev')
 PANEL
 
 }
