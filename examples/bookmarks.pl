@@ -3,9 +3,10 @@ use warnings;
 
 use XML::Feed;
 use URI;
-use Perl6::Say;
 use Cache::File;
 use URI::Fetch;
+
+binmode(STDOUT, ":utf8");
 
 my $target = 'http://b.hatena.ne.jp/hotentry.rss';
 
@@ -18,5 +19,6 @@ my $res = URI::Fetch->fetch(
 my $feed = XML::Feed->parse(\($res->content));
 
 for my $entry ($feed->entries) {
-    say sprintf("%s\tcall system('open %s')", $entry->title, $entry->link);
+    print sprintf("%s\tcall unite#util#open('%s')\n", $entry->title, $entry->link);
 }
+
