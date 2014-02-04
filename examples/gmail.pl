@@ -2,10 +2,11 @@ use strict;
 use warnings;
 
 use XML::Feed;
-use Perl6::Say;
 use LWP::UserAgent;
 use HTTP::Request::Common;
 use Config::Pit;
+
+binmode(STDOUT, ":utf8");
 
 my $config = pit_get("mail.google.com", require => {
     "username" => "your username",
@@ -24,6 +25,6 @@ my $feed = XML::Feed->parse(\($res->content));
 for my $entry ($feed->entries) {
     my $summary = $entry->summary->body;
     $summary =~ s/^.*。\s+//g;
-    say sprintf(qq<%s\tcall system('open "%s"')>, $summary, $entry->link);
+    print sprintf(qq<%s\tcall unite#util#open('%s')\n>, $summary, $entry->link);
 }
 
