@@ -1,5 +1,10 @@
-unite-script
-============
+# DEPRECATED
+unite-script has already been bundled in Unite.vim from ver 6. 
+DO NOT use this to use script source of Unite.vim.
+
+Scripts under examples directory are stil useful to use with script source in Unite.vim ver 6.
+
+# unite-script
 
 Use the result of your script as Unite.vim source.
 
