@@ -1,15 +1,28 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'yaml'
 
-API_URL = URI.parse('https://api.github.com/notifications?all=1')
+# save token configuration at ~/.unitescriptrc as yaml
+#
+# github-notify:
+#   - api_base: https://api.github.com
+#     oauth_token: abcd1234
 
-http = Net::HTTP.new(API_URL.host, API_URL.port)
-http.use_ssl = true
-http.start do |http|
-  res = http.get(API_URL.path, { 'Authorization' => "token #{ ENV['GITHUB_TOKEN'] }"} )
-  results = JSON.parse(res.body)
-  results.each do |notify|
-    puts "#{ notify['subject']['title'] }\tcall unite#util#open('#{ notify['subject']['url'] }')"
+CONFIG = '~/.unitescriptrc'
+configs = YAML.load( File.open(File.expand_path( CONFIG )) {|f| f.read } ).fetch('github-notify', [])
+
+configs.each do |config|
+  api_url = URI.parse( config['api_base'] + '/notifications' )
+  
+  http = Net::HTTP.new(api_url.host, api_url.port)
+  http.use_ssl = true
+  http.open_timeout = 3
+  http.start do |http|
+    res = http.get(api_url.path, { 'Authorization' => "token #{ config['oauth_token'] }"} )
+    results = JSON.parse(res.body)
+    results.each do |notify|
+      puts "#{ notify['subject']['type']}/#{ notify['reason']} #{ notify['subject']['title'] }\tcall unite#util#open('#{ notify['subject']['url'] }')"
+    end
   end
 end
