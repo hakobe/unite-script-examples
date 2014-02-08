@@ -43,7 +43,7 @@ def list
 
     results = fetch_json(api_url)
     results.each do |notify|
-      puts "#{notify['repository']['name']} #{ notify['subject']['type']} #{ notify['subject']['title'] }\t" +
+      puts "[#{notify['repository']['name']} #{ notify['subject']['type']}] #{ notify['subject']['title'] }\t" +
         "call unite#util#system('ruby #{  File.expand_path(__FILE__) } open #{ notify['subject']['url'] }')"
     end
   end
